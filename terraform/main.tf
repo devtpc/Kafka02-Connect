@@ -15,10 +15,6 @@ resource "azurerm_resource_group" "bdcc" {
   name = "rg-${var.ENV}-${var.LOCATION}"
   location = var.LOCATION
 
-  lifecycle {
-    prevent_destroy = true
-  }
-
   tags = {
     region = var.BDCC_REGION
     env = var.ENV
@@ -41,9 +37,6 @@ resource "azurerm_storage_account" "bdcc" {
     ip_rules = values(var.IP_RULES)
   }
 
-  lifecycle {
-    prevent_destroy = true
-  }
 
   tags = {
     region = var.BDCC_REGION
@@ -58,9 +51,6 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "gen2_data" {
   name = "data"
   storage_account_id = azurerm_storage_account.bdcc.id
 
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 
@@ -76,7 +66,7 @@ resource "azurerm_kubernetes_cluster" "bdcc" {
   default_node_pool {
     name       = "default"
     node_count = 1
-    vm_size    = "Standard_D2_v2"
+    vm_size    = "Standard_D3_v2"
   }
 
   identity {

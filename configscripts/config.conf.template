@@ -1,0 +1,13 @@
+# Rename this file to config.conf, and fill AZURE_BASE, DOCKER_IMAGE_NAME WITH YOUR DATA
+
+# Azure AKS keys
+AZURE_BASE="YOUR_BASE_NAME"  #USE YOUR OWN STRING - It doesn't need to be secret, mut make sure it's unique
+AZURE_LOCATION="westeurope" #LEAVE IT AS IT IS, OR USE YOUR OWN AZURE REGION
+
+AKS_RESOURCE_GROUP=rg-"$AZURE_BASE"-"$AZURE_LOCATION"
+AKS_CLUSTER=aks-"$AZURE_BASE"-"$AZURE_LOCATION"
+STORAGE_ACCOUNT=st"$AZURE_BASE""$AZURE_LOCATION"
+
+#DOCKER NAMES
+DOCKER_IMAGE_NAME='YOUR_IMAGE_NAME_HERE' #Your Docker image name in dockerhub_user_name/image_name:tag format
+DOCKER_IMAGE_PATH='docker.io/'$DOCKER_IMAGE_NAME
