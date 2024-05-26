@@ -44,7 +44,7 @@ Go to the [configcripts folder](/configscripts/) and copy/rename the `config.con
 
 In the [configcripts folder](/configscripts/) copy/rename the `terraform_backend.conf.template` file to `terraform_backend.conf`. Fill the parameters with the terraform data.
 
-Propagate your config data to other folders with the [refreshconfs.sh](/configscripts/refresh_confs.sh) script, or with `make refresh-confs` from the main folder
+Propagate your config data to other folders with the [refreshconfs.sh](/configscripts/refresh_confs.sh) script, or with `make refresh-confs` from the main folder.
 
 The details are in comments in the config files.
 
@@ -220,13 +220,13 @@ It can be checked, that it is working:
 
 ## Create the expedia topic
 
-use `make createtopic-expedia` to create the expedia topic. The command internally uses this command:
+Use `make createtopic-expedia` to create the expedia topic. The command internally uses this command:
 ```
 kubectl exec kafka-0 -- /bin/bash -c 'kafka-topics --bootstrap-server localhost:9092 --create --topic expedia --replication-factor 3 --partitions 3'
 ```
 Note, that we are creating 3 partitions, as we have 3 partitions in the original source files.
 
-Normally, when not using `Makefile` this command is executed in two steps. First we open a terminal in one of the a cluster's node:
+Normally, when not using `Makefile` this command is executed in two steps. First we open a terminal in one of the cluster's nodes:
 ```
 kubectl exec -it kafka-0 -- /bin/bash
 ```
@@ -238,13 +238,13 @@ kafka-topics --bootstrap-server localhost:9092 --create --topic expedia --replic
 
 ![Topic created 1 img](/screenshots/img_topic_created_1.png)
 
-We can check on the Control Center that the topic is really created
+We can check in the Control Center that the topic is really created:
 
 ![Topic created 2 img](/screenshots/img_topic_created_2.png)
 
 ## Prepare the Azure connector configuration
 
-The created connector is the [azure-source-expedia.json](/connectors/azure-source-expedia.json) in the [/connectors](/connectors/) folder
+The created connector is the [azure-source-expedia.json](/connectors/azure-source-expedia.json) in the [/connectors](/connectors/) folder.
 Some important elements from the connector's config part:
 
 The connector is based on the generic `AzureBlobStorageSourceConnector`, using the generic mode.
@@ -262,7 +262,7 @@ The access path and credentials to the storages should be properly set. You eith
 ```
 
 
-As the `date_time` field should me masked, it has to be set properly:
+As the `date_time` field should be masked, it has to be set properly:
 ```
       "transforms": "MaskField",
       "transforms.MaskField.type": "org.apache.kafka.connect.transforms.MaskField$Value",
@@ -283,7 +283,7 @@ The topic details, and format should be properly set:
 
 
 > [!CAUTION]
-> Be extreme careful, if the Connector isn't working properly, and immediately examine the logs, or shut down the connector/cluster! Although using the small quantity of data on a storage is very cheap in Azure, the pricing has an other important factor: number or transactions. A badly designed or erroneous Connector may constantly poll your storage at a very high rate, resulting in an extremely high transaction count. This chart shows, that while I was experimenting with some configurations, and used some wrong settings, I had almost 3.5 million transanctions on the storage, resulting in a cost of more that 20 EUR. On the chart a bar is 5 minutes wide, meaning that sometimes it was more than 200,000 ListBlob operations within 5 minutes!
+> Be extreme careful, if the Connector isn't working properly, and immediately examine the logs, or shut down the connector/cluster! Although using small quantity of data on a storage is very cheap in Azure, the pricing has an other important factor: number or transactions. A badly designed or erroneous Connector may constantly poll your storage at a very high rate, resulting in an extremely high transaction count. This chart shows, that while I was experimenting with some configuration options, and used some wrong settings, I had almost 3.5 million transanctions on the storage, resulting in a cost of more that 20 EUR. A bar is 5 minutes wide on the chart, meaning that sometimes it was more than 200,000 ListBlobs operations within 5 minutes!
 >
 > ![Transaction chart img](/screenshots/img_transaction_chart.png)
 
